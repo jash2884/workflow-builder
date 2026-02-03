@@ -1,22 +1,12 @@
-# Welcome to your Lovable project
+# Workflow Builder
 
-## Project info
+A visual workflow builder for composing and executing multi-step workflows with nodes for text, images, videos, LLM calls, cropping, and frame extraction.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
+## Setup
 
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and make changes.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -50,24 +40,37 @@ npm run dev
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## What technologies are used for this project?
+## Deployment
 
-This project is built with:
+Build the project with `npm run build` and deploy the `dist/` directory to your hosting provider.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Technologies
 
-## How can I deploy this project?
+## Authentication (local mock)
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+This project includes a lightweight, development-only auth implementation:
 
-## Can I connect a custom domain to my Lovable project?
+- `src/hooks/use-auth.tsx` — `AuthProvider` and `useAuth()` that store a minimal `user` object in `localStorage`.
+- `src/components/auth/SignIn.tsx` — simple sign-in form at the `/signin` route.
+- `src/components/auth/RequireAuth.tsx` — route guard that redirects unauthenticated users to `/signin`.
 
-Yes, you can!
+How it works:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- The `AuthProvider` is wired in `src/App.tsx`. The root route (`/`) is protected and will redirect to `/signin` if not signed in.
+- This is intentionally minimal for local development/testing. Do not use for production.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Replacing with a real provider
+
+- To replace with Supabase, Firebase, or another provider:
+	1. Install the provider SDK and add client initialization using environment variables.
+	2. Replace `use-auth.tsx` to call the provider's sign-in and sign-out methods and sync the authenticated user.
+	3. Keep `RequireAuth` or adapt it to check the provider's auth state.
+
+Example commands to run the app locally:
+
+```bash
+npm install
+npm run dev
+```
+
+If you want, I can add an example Supabase integration and `.env` instructions next.

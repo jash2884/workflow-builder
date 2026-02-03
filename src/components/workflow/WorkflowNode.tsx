@@ -95,10 +95,13 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
       ))}
 
       {/* Header */}
-      <div className={cn(
-        'flex items-center justify-between p-3 rounded-t-xl border-b border-border',
-        'bg-node-accent'
-      )}>
+      <div
+        data-drag-handle
+        className={cn(
+          'flex items-center justify-between p-3 rounded-t-xl border-b border-border',
+          'bg-node-accent'
+        )}
+      >
         <div className="flex items-center gap-2">
           <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab" />
           <div className={cn(
@@ -370,7 +373,7 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
           type="source"
           position={Position.Right}
           id={output.id}
-          style={{ top: '50%' }}
+          style={{ top: 60 + index * 40 }}
           className="w-3 h-3 border-2 border-background bg-primary"
         />
       ))}

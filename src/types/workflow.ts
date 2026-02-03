@@ -98,7 +98,8 @@ export const NODE_CONFIGS: Record<NodeType, NodeConfig> = {
     description: 'Simple text input',
     icon: 'Type',
     color: 'text',
-    inputs: [],
+    // Allow text nodes to accept input from other nodes
+    inputs: [{ id: 'input', label: 'Text input', type: 'text' }],
     outputs: [{ id: 'output', label: 'Text', type: 'text' }],
   },
   image: {
@@ -107,7 +108,8 @@ export const NODE_CONFIGS: Record<NodeType, NodeConfig> = {
     description: 'Upload image file',
     icon: 'Image',
     color: 'image',
-    inputs: [],
+    // Accept image inputs from other nodes (uploads or generated images)
+    inputs: [{ id: 'image_url', label: 'Image', type: 'image', required: true }],
     outputs: [{ id: 'output', label: 'Image URL', type: 'image' }],
   },
   video: {
@@ -116,7 +118,8 @@ export const NODE_CONFIGS: Record<NodeType, NodeConfig> = {
     description: 'Upload video file',
     icon: 'Video',
     color: 'video',
-    inputs: [],
+    // Accept video inputs from other nodes (uploads or generated video links)
+    inputs: [{ id: 'video_url', label: 'Video', type: 'video', required: true }],
     outputs: [{ id: 'output', label: 'Video URL', type: 'video' }],
   },
   llm: {
