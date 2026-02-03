@@ -20,7 +20,14 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/" element={<RequireAuth><Index /></RequireAuth>} />
+            <Route
+              path="/"
+              element={
+                <RequireAuth>
+                  <Index />
+                </RequireAuth>
+              }
+            />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

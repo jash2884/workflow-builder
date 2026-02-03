@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -40,7 +46,9 @@ const SignIn = () => {
               />
             </div>
             <div className="flex items-center justify-between">
-              <div className="text-sm text-muted-foreground">Development-only mock auth</div>
+              <div className="text-sm text-muted-foreground">
+                Development-only mock auth
+              </div>
             </div>
             <div>
               <Button type="submit" className="w-full">
@@ -50,7 +58,9 @@ const SignIn = () => {
           </form>
         </CardContent>
         <CardFooter className="justify-center">
-          <div className="text-sm text-muted-foreground">Need an account? Just enter any email to sign in.</div>
+          <div className="text-sm text-muted-foreground">
+            Need an account? Just enter any email to sign in.
+          </div>
         </CardFooter>
       </Card>
     </div>

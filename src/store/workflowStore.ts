@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 import {
   Connection,
   Edge,
@@ -11,43 +11,52 @@ import {
   OnConnect,
   applyNodeChanges,
   applyEdgeChanges,
-} from 'reactflow';
-import { NodeData, NodeType, WorkflowRun, NODE_CONFIGS } from '@/types/workflow';
+} from "reactflow";
+import {
+  NodeData,
+  NodeType,
+  WorkflowRun,
+  NODE_CONFIGS,
+} from "@/types/workflow";
 
 interface WorkflowState {
   // Nodes and edges
   nodes: Node<NodeData>[];
   edges: Edge[];
-  
+
   // Selected node
   selectedNodeId: string | null;
-  
+
   // History
   workflowRuns: WorkflowRun[];
-  
+
   // UI state
   leftSidebarOpen: boolean;
   rightSidebarOpen: boolean;
-  
+
   // Actions
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
-  
+
   addNode: (type: NodeType, position: { x: number; y: number }) => void;
   updateNodeData: (nodeId: string, data: Partial<NodeData>) => void;
   deleteNode: (nodeId: string) => void;
   selectNode: (nodeId: string | null) => void;
-  
-  setNodeStatus: (nodeId: string, status: NodeData['status'], error?: string) => void;
-  
+
+  setNodeStatus: (
+    nodeId: string,
+    status: NodeData["status"],
+    error?: string,
+  ) => void;
+
   toggleLeftSidebar: () => void;
   toggleRightSidebar: () => void;
-  
+
   // Workflow actions
   runWorkflow: () => Promise<void>;
   runNode: (nodeId: string) => Promise<void>;
-  
+
   // Clear
   clearWorkflow: () => void;
 }
@@ -88,7 +97,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
 
     if (!sourceHandle) {
       // default to common output id
-      sourceHandle = 'output';
+      sourceHandle = "output";
     }
 
     if (!targetHandle) {
@@ -96,9 +105,9 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
       const targetNode = get().nodes.find((n) => n.id === connection.target);
       if (targetNode) {
         const cfg = NODE_CONFIGS[targetNode.data.type];
-        targetHandle = cfg.inputs?.[0]?.id || 'input';
+        targetHandle = cfg.inputs?.[0]?.id || "input";
       } else {
-        targetHandle = 'input';
+        targetHandle = "input";
       }
     }
 
@@ -122,7 +131,11 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
     // Debug log to help diagnose attachment issues
     try {
       // eslint-disable-next-line no-console
-      console.debug('[onConnect] adding edge', { connection, newEdge, existingEdges: get().edges });
+      console.debug("[onConnect] adding edge", {
+        connection,
+        newEdge,
+        existingEdges: get().edges,
+      });
     } catch {}
 
     set({
@@ -134,7 +147,9 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
       const targetNode = get().nodes.find((n) => n.id === connection.target);
       if (targetNode) {
         const prev = targetNode.data.connectedInputs || [];
-        const connectedInputs = prev.includes(targetHandle) ? prev : [...prev, targetHandle];
+        const connectedInputs = prev.includes(targetHandle)
+          ? prev
+          : [...prev, targetHandle];
         get().updateNodeData(connection.target, { connectedInputs });
       }
     }
@@ -144,25 +159,25 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
     const config = NODE_CONFIGS[type];
     const newNode: Node<NodeData> = {
       id: getNodeId(),
-      type: 'workflow',
+      type: "workflow",
       position,
       data: {
         label: config.label,
         type,
-        status: 'idle',
+        status: "idle",
         connectedInputs: [],
         // Default values
-        ...(type === 'crop' && {
+        ...(type === "crop" && {
           xPercent: 0,
           yPercent: 0,
           widthPercent: 100,
           heightPercent: 100,
         }),
-        ...(type === 'frame' && {
-          timestamp: '0',
+        ...(type === "frame" && {
+          timestamp: "0",
         }),
-        ...(type === 'llm' && {
-          model: 'gemini-1.5-flash',
+        ...(type === "llm" && {
+          model: "gemini-1.5-flash",
         }),
       },
     };
@@ -177,7 +192,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
       nodes: get().nodes.map((node) =>
         node.id === nodeId
           ? { ...node, data: { ...node.data, ...data } }
-          : node
+          : node,
       ),
     });
   },
@@ -186,9 +201,10 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
     set({
       nodes: get().nodes.filter((node) => node.id !== nodeId),
       edges: get().edges.filter(
-        (edge) => edge.source !== nodeId && edge.target !== nodeId
+        (edge) => edge.source !== nodeId && edge.target !== nodeId,
       ),
-      selectedNodeId: get().selectedNodeId === nodeId ? null : get().selectedNodeId,
+      selectedNodeId:
+        get().selectedNodeId === nodeId ? null : get().selectedNodeId,
     });
   },
 
@@ -196,7 +212,11 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
     set({ selectedNodeId: nodeId });
   },
 
-  setNodeStatus: (nodeId: string, status: NodeData['status'], error?: string) => {
+  setNodeStatus: (
+    nodeId: string,
+    status: NodeData["status"],
+    error?: string,
+  ) => {
     get().updateNodeData(nodeId, { status, error });
   },
 
@@ -218,7 +238,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   },
 
   runNode: async (nodeId: string) => {
-    get().setNodeStatus(nodeId, 'running');
+    get().setNodeStatus(nodeId, "running");
 
     // Simulate execution
     await new Promise((resolve) => setTimeout(resolve, 1200));
@@ -226,36 +246,37 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
     // Random success/error for demo
     const success = Math.random() > 0.05; // mostly succeed
     if (!success) {
-      get().setNodeStatus(nodeId, 'error', 'Execution failed');
+      get().setNodeStatus(nodeId, "error", "Execution failed");
       return;
     }
 
     // Mark success and compute output for demo nodes
-    get().setNodeStatus(nodeId, 'success');
+    get().setNodeStatus(nodeId, "success");
     const node = get().nodes.find((n) => n.id === nodeId);
     if (!node) return;
 
     // Demo output generation for multiple node types
     let output: unknown = undefined;
-    if (node.data.type === 'llm') {
-      output = 'This is a sample LLM response. In production, this would be the actual output from the Gemini API.';
+    if (node.data.type === "llm") {
+      output =
+        "This is a sample LLM response. In production, this would be the actual output from the Gemini API.";
       get().updateNodeData(nodeId, { output: output as string });
-    } else if (node.data.type === 'text') {
-      output = node.data.content || '';
+    } else if (node.data.type === "text") {
+      output = node.data.content || "";
       get().updateNodeData(nodeId, { output: output as string });
-    } else if (node.data.type === 'image') {
+    } else if (node.data.type === "image") {
       // For uploaded images, echo the file URL as output
       output = node.data.fileUrl || null;
       get().updateNodeData(nodeId, { output: output as string | undefined });
-    } else if (node.data.type === 'video') {
+    } else if (node.data.type === "video") {
       // For uploaded videos, echo the file URL as output
       output = node.data.fileUrl || null;
       get().updateNodeData(nodeId, { output: output as string | undefined });
-    } else if (node.data.type === 'crop') {
+    } else if (node.data.type === "crop") {
       // Crop requires an input image URL. Prefer connected input or manual `image_url` field.
       const sourceImage = node.data.image_url || node.data.output || null;
       if (!sourceImage) {
-        get().setNodeStatus(nodeId, 'error', 'No image provided to crop');
+        get().setNodeStatus(nodeId, "error", "No image provided to crop");
         output = null;
       } else {
         const x = node.data.xPercent ?? 0;
@@ -266,14 +287,18 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
         output = `${sourceImage}?crop=${x},${y},${w},${h}`;
         get().updateNodeData(nodeId, { output: output as string });
       }
-    } else if (node.data.type === 'frame') {
+    } else if (node.data.type === "frame") {
       // Frame extraction requires a video URL
       const sourceVideo = node.data.video_url || node.data.output || null;
       if (!sourceVideo) {
-        get().setNodeStatus(nodeId, 'error', 'No video provided to extract frame');
+        get().setNodeStatus(
+          nodeId,
+          "error",
+          "No video provided to extract frame",
+        );
         output = null;
       } else {
-        const ts = node.data.timestamp || '0';
+        const ts = node.data.timestamp || "0";
         // Simulate a frame image URL
         output = `${sourceVideo}?frame=${encodeURIComponent(ts)}`;
         get().updateNodeData(nodeId, { output: output as string });
@@ -290,7 +315,9 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
       const targetNode = get().nodes.find((n) => n.id === targetId);
       if (!targetNode) continue;
 
-      get().updateNodeData(targetId, { ...( { [targetHandle]: output } as any ) });
+      get().updateNodeData(targetId, {
+        ...({ [targetHandle]: output } as any),
+      });
     }
   },
 

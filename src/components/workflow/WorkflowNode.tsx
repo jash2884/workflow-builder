@@ -1,33 +1,33 @@
-import { memo } from 'react';
-import { Handle, Position, NodeProps } from 'reactflow';
-import { motion } from 'framer-motion';
-import { 
-  Type, 
-  Image, 
-  Video, 
-  Sparkles, 
-  Crop, 
-  Film, 
-  Play, 
+import { memo } from "react";
+import { Handle, Position, NodeProps } from "reactflow";
+import { motion } from "framer-motion";
+import {
+  Type,
+  Image,
+  Video,
+  Sparkles,
+  Crop,
+  Film,
+  Play,
   Trash2,
   GripVertical,
   ChevronDown,
-  ChevronUp
-} from 'lucide-react';
-import { NodeData, NODE_CONFIGS } from '@/types/workflow';
-import { useWorkflowStore } from '@/store/workflowStore';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
-import { useState } from 'react';
+  ChevronUp,
+} from "lucide-react";
+import { NodeData, NODE_CONFIGS } from "@/types/workflow";
+import { useWorkflowStore } from "@/store/workflowStore";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
 
 const icons = {
   Type,
@@ -45,13 +45,13 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
   const Icon = icons[config.icon as keyof typeof icons];
 
   const accentClass = `node-accent-${config.color}`;
-  
+
   const statusClass = {
-    idle: '',
-    running: 'node-running',
-    success: 'node-success',
-    error: 'node-error',
-  }[data.status || 'idle'];
+    idle: "",
+    running: "node-running",
+    success: "node-success",
+    error: "node-error",
+  }[data.status || "idle"];
 
   const handleRun = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -72,11 +72,11 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       className={cn(
-        'workflow-node min-w-[280px] max-w-[320px]',
+        "workflow-node min-w-[280px] max-w-[320px]",
         accentClass,
         statusClass,
-        selected && 'selected',
-        'bg-card border-node-accent'
+        selected && "selected",
+        "bg-card border-node-accent",
       )}
     >
       {/* Input handles */}
@@ -88,8 +88,8 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
           id={input.id}
           style={{ top: 60 + index * 40 }}
           className={cn(
-            'w-3 h-3 border-2 border-background transition-all',
-            isInputConnected(input.id) ? 'bg-primary' : 'bg-muted-foreground'
+            "w-3 h-3 border-2 border-background transition-all",
+            isInputConnected(input.id) ? "bg-primary" : "bg-muted-foreground",
           )}
         />
       ))}
@@ -98,21 +98,27 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
       <div
         data-drag-handle
         className={cn(
-          'flex items-center justify-between p-3 rounded-t-xl border-b border-border',
-          'bg-node-accent'
+          "flex items-center justify-between p-3 rounded-t-xl border-b border-border",
+          "bg-node-accent",
         )}
       >
         <div className="flex items-center gap-2">
           <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab" />
-          <div className={cn(
-            'w-8 h-8 rounded-lg flex items-center justify-center',
-            'bg-background/50'
-          )}>
+          <div
+            className={cn(
+              "w-8 h-8 rounded-lg flex items-center justify-center",
+              "bg-background/50",
+            )}
+          >
             <Icon className="w-4 h-4 text-node-accent" />
           </div>
           <div>
-            <h3 className="font-medium text-sm text-foreground">{data.label}</h3>
-            <p className="text-xs text-muted-foreground">{config.description}</p>
+            <h3 className="font-medium text-sm text-foreground">
+              {data.label}
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              {config.description}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-1">
@@ -122,7 +128,11 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
             className="w-7 h-7 text-muted-foreground hover:text-foreground"
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            {expanded ? (
+              <ChevronUp className="w-4 h-4" />
+            ) : (
+              <ChevronDown className="w-4 h-4" />
+            )}
           </Button>
         </div>
       </div>
@@ -131,23 +141,23 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
       {expanded && (
         <div className="p-3 space-y-3">
           {/* Text Node */}
-          {data.type === 'text' && (
+          {data.type === "text" && (
             <Textarea
               placeholder="Enter your text..."
-              value={data.content || ''}
+              value={data.content || ""}
               onChange={(e) => updateNodeData(id, { content: e.target.value })}
               className="min-h-[80px] bg-background/50 border-border text-sm resize-none"
             />
           )}
 
           {/* Image Upload Node */}
-          {data.type === 'image' && (
+          {data.type === "image" && (
             <div className="space-y-2">
               {data.fileUrl ? (
                 <div className="relative rounded-lg overflow-hidden">
-                  <img 
-                    src={data.fileUrl} 
-                    alt={data.fileName || 'Uploaded'} 
+                  <img
+                    src={data.fileUrl}
+                    alt={data.fileName || "Uploaded"}
                     className="w-full h-32 object-cover"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-background/80 px-2 py-1">
@@ -157,16 +167,21 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
               ) : (
                 <label className="flex flex-col items-center justify-center h-24 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
                   <Image className="w-8 h-8 text-muted-foreground mb-2" />
-                  <span className="text-xs text-muted-foreground">Click to upload image</span>
-                  <input 
-                    type="file" 
-                    accept="image/*" 
+                  <span className="text-xs text-muted-foreground">
+                    Click to upload image
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
                     className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
                         const url = URL.createObjectURL(file);
-                        updateNodeData(id, { fileUrl: url, fileName: file.name });
+                        updateNodeData(id, {
+                          fileUrl: url,
+                          fileName: file.name,
+                        });
                       }
                     }}
                   />
@@ -176,12 +191,12 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
           )}
 
           {/* Video Upload Node */}
-          {data.type === 'video' && (
+          {data.type === "video" && (
             <div className="space-y-2">
               {data.fileUrl ? (
                 <div className="relative rounded-lg overflow-hidden">
-                  <video 
-                    src={data.fileUrl} 
+                  <video
+                    src={data.fileUrl}
                     className="w-full h-32 object-cover"
                     controls
                   />
@@ -192,16 +207,21 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
               ) : (
                 <label className="flex flex-col items-center justify-center h-24 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
                   <Video className="w-8 h-8 text-muted-foreground mb-2" />
-                  <span className="text-xs text-muted-foreground">Click to upload video</span>
-                  <input 
-                    type="file" 
-                    accept="video/*" 
+                  <span className="text-xs text-muted-foreground">
+                    Click to upload video
+                  </span>
+                  <input
+                    type="file"
+                    accept="video/*"
                     className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
                         const url = URL.createObjectURL(file);
-                        updateNodeData(id, { fileUrl: url, fileName: file.name });
+                        updateNodeData(id, {
+                          fileUrl: url,
+                          fileName: file.name,
+                        });
                       }
                     }}
                   />
@@ -211,44 +231,60 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
           )}
 
           {/* LLM Node */}
-          {data.type === 'llm' && (
+          {data.type === "llm" && (
             <div className="space-y-3">
               <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Model</label>
-                <Select 
-                  value={data.model} 
+                <label className="text-xs text-muted-foreground mb-1 block">
+                  Model
+                </label>
+                <Select
+                  value={data.model}
                   onValueChange={(v) => updateNodeData(id, { model: v })}
                 >
                   <SelectTrigger className="h-8 text-xs bg-background/50">
                     <SelectValue placeholder="Select model" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="gemini-1.5-pro">Gemini 1.5 Pro</SelectItem>
-                    <SelectItem value="gemini-1.5-flash">Gemini 1.5 Flash</SelectItem>
-                    <SelectItem value="gemini-pro-vision">Gemini Pro Vision</SelectItem>
+                    <SelectItem value="gemini-1.5-pro">
+                      Gemini 1.5 Pro
+                    </SelectItem>
+                    <SelectItem value="gemini-1.5-flash">
+                      Gemini 1.5 Flash
+                    </SelectItem>
+                    <SelectItem value="gemini-pro-vision">
+                      Gemini Pro Vision
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              
-              {!isInputConnected('system_prompt') && (
+
+              {!isInputConnected("system_prompt") && (
                 <div>
-                  <label className="text-xs text-muted-foreground mb-1 block">System Prompt</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">
+                    System Prompt
+                  </label>
                   <Textarea
                     placeholder="System instructions..."
-                    value={data.systemPrompt || ''}
-                    onChange={(e) => updateNodeData(id, { systemPrompt: e.target.value })}
+                    value={data.systemPrompt || ""}
+                    onChange={(e) =>
+                      updateNodeData(id, { systemPrompt: e.target.value })
+                    }
                     className="min-h-[60px] bg-background/50 border-border text-xs resize-none"
                   />
                 </div>
               )}
-              
-              {!isInputConnected('user_message') && (
+
+              {!isInputConnected("user_message") && (
                 <div>
-                  <label className="text-xs text-muted-foreground mb-1 block">User Message</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">
+                    User Message
+                  </label>
                   <Textarea
                     placeholder="Your message..."
-                    value={data.userMessage || ''}
-                    onChange={(e) => updateNodeData(id, { userMessage: e.target.value })}
+                    value={data.userMessage || ""}
+                    onChange={(e) =>
+                      updateNodeData(id, { userMessage: e.target.value })
+                    }
                     className="min-h-[60px] bg-background/50 border-border text-xs resize-none"
                   />
                 </div>
@@ -257,7 +293,9 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
               {/* Output display */}
               {data.output && (
                 <div className="p-2 rounded-lg bg-execution-success/10 border border-execution-success/20">
-                  <label className="text-xs text-execution-success mb-1 block">Output</label>
+                  <label className="text-xs text-execution-success mb-1 block">
+                    Output
+                  </label>
                   <p className="text-xs text-foreground">{data.output}</p>
                 </div>
               )}
@@ -265,71 +303,91 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
           )}
 
           {/* Crop Node */}
-          {data.type === 'crop' && (
+          {data.type === "crop" && (
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="text-xs text-muted-foreground mb-1 block">X %</label>
+                <label className="text-xs text-muted-foreground mb-1 block">
+                  X %
+                </label>
                 <Input
                   type="number"
                   min={0}
                   max={100}
                   value={data.xPercent || 0}
-                  onChange={(e) => updateNodeData(id, { xPercent: Number(e.target.value) })}
+                  onChange={(e) =>
+                    updateNodeData(id, { xPercent: Number(e.target.value) })
+                  }
                   className="h-8 text-xs bg-background/50"
-                  disabled={isInputConnected('x_percent')}
+                  disabled={isInputConnected("x_percent")}
                 />
               </div>
               <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Y %</label>
+                <label className="text-xs text-muted-foreground mb-1 block">
+                  Y %
+                </label>
                 <Input
                   type="number"
                   min={0}
                   max={100}
                   value={data.yPercent || 0}
-                  onChange={(e) => updateNodeData(id, { yPercent: Number(e.target.value) })}
+                  onChange={(e) =>
+                    updateNodeData(id, { yPercent: Number(e.target.value) })
+                  }
                   className="h-8 text-xs bg-background/50"
-                  disabled={isInputConnected('y_percent')}
+                  disabled={isInputConnected("y_percent")}
                 />
               </div>
               <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Width %</label>
+                <label className="text-xs text-muted-foreground mb-1 block">
+                  Width %
+                </label>
                 <Input
                   type="number"
                   min={0}
                   max={100}
                   value={data.widthPercent || 100}
-                  onChange={(e) => updateNodeData(id, { widthPercent: Number(e.target.value) })}
+                  onChange={(e) =>
+                    updateNodeData(id, { widthPercent: Number(e.target.value) })
+                  }
                   className="h-8 text-xs bg-background/50"
-                  disabled={isInputConnected('width_percent')}
+                  disabled={isInputConnected("width_percent")}
                 />
               </div>
               <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Height %</label>
+                <label className="text-xs text-muted-foreground mb-1 block">
+                  Height %
+                </label>
                 <Input
                   type="number"
                   min={0}
                   max={100}
                   value={data.heightPercent || 100}
-                  onChange={(e) => updateNodeData(id, { heightPercent: Number(e.target.value) })}
+                  onChange={(e) =>
+                    updateNodeData(id, {
+                      heightPercent: Number(e.target.value),
+                    })
+                  }
                   className="h-8 text-xs bg-background/50"
-                  disabled={isInputConnected('height_percent')}
+                  disabled={isInputConnected("height_percent")}
                 />
               </div>
             </div>
           )}
 
           {/* Frame Extraction Node */}
-          {data.type === 'frame' && (
+          {data.type === "frame" && (
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">
                 Timestamp (seconds or percentage like "50%")
               </label>
               <Input
                 placeholder="0 or 50%"
-                value={data.timestamp || '0'}
-                onChange={(e) => updateNodeData(id, { timestamp: e.target.value })}
+                value={data.timestamp || "0"}
+                onChange={(e) =>
+                  updateNodeData(id, { timestamp: e.target.value })
+                }
                 className="h-8 text-xs bg-background/50"
-                disabled={isInputConnected('timestamp')}
+                disabled={isInputConnected("timestamp")}
               />
             </div>
           )}
@@ -359,10 +417,10 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
           size="sm"
           className="h-7 text-xs"
           onClick={handleRun}
-          disabled={data.status === 'running'}
+          disabled={data.status === "running"}
         >
           <Play className="w-3 h-3 mr-1" />
-          {data.status === 'running' ? 'Running...' : 'Run'}
+          {data.status === "running" ? "Running..." : "Run"}
         </Button>
       </div>
 
@@ -381,6 +439,6 @@ const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
   );
 });
 
-WorkflowNode.displayName = 'WorkflowNode';
+WorkflowNode.displayName = "WorkflowNode";
 
 export default WorkflowNode;
