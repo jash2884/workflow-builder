@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Handle, Position, NodeProps } from "reactflow";
+import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { motion } from "framer-motion";
 import {
   Type,
@@ -14,7 +14,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import { NodeData, NODE_CONFIGS } from "@/types/workflow";
+import { NODE_CONFIGS, type WorkflowNode as WorkflowNodeType } from "@/types/workflow";
 import { useWorkflowStore } from "@/store/workflowStore";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -38,7 +38,7 @@ const icons = {
   Film,
 };
 
-const WorkflowNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
+const WorkflowNode = memo(({ id, data, selected }: NodeProps<WorkflowNodeType>) => {
   const { updateNodeData, deleteNode, runNode } = useWorkflowStore();
   const [expanded, setExpanded] = useState(true);
   const config = NODE_CONFIGS[data.type];

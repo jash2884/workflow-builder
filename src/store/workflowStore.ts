@@ -11,7 +11,7 @@ import {
   OnConnect,
   applyNodeChanges,
   applyEdgeChanges,
-} from "reactflow";
+} from "@xyflow/react";
 import {
   NodeData,
   NodeType,
@@ -35,7 +35,7 @@ interface WorkflowState {
   rightSidebarOpen: boolean;
 
   // Actions
-  onNodesChange: OnNodesChange;
+  onNodesChange: OnNodesChange<Node<NodeData>>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
 
@@ -72,7 +72,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   leftSidebarOpen: true,
   rightSidebarOpen: true,
 
-  onNodesChange: (changes: NodeChange[]) => {
+  onNodesChange: (changes: NodeChange<Node<NodeData>>[]) => {
     set({
       nodes: applyNodeChanges(changes, get().nodes),
     });

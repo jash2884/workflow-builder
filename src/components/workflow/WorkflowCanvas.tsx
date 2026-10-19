@@ -1,13 +1,14 @@
 import { useCallback, useRef } from 'react';
-import ReactFlow, {
+import {
+  ReactFlow,
   Background,
   Controls,
   MiniMap,
   BackgroundVariant,
   ReactFlowProvider,
   ReactFlowInstance,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
 
 import { useWorkflowStore } from '@/store/workflowStore';
 import WorkflowNode from './WorkflowNode';
@@ -44,12 +45,13 @@ export function WorkflowCanvas() {
       event.preventDefault();
 
       const type = event.dataTransfer.getData('application/reactflow') as NodeType;
-      if (!type || !reactFlowInstance.current || !reactFlowWrapper.current) return;
+      if (!type || !reactFlowInstance.current) return;
 
-      const bounds = reactFlowWrapper.current.getBoundingClientRect();
+      // screenToFlowPosition expects raw client coordinates and already
+      // accounts for the canvas offset, so don't subtract the wrapper bounds
       const position = reactFlowInstance.current.screenToFlowPosition({
-        x: event.clientX - bounds.left,
-        y: event.clientY - bounds.top,
+        x: event.clientX,
+        y: event.clientY,
       });
 
       addNode(type, position);
@@ -73,6 +75,7 @@ export function WorkflowCanvas() {
         fitView
         snapToGrid
         snapGrid={[20, 20]}
+        colorMode="dark"
         className="bg-canvas-bg"
         proOptions={{ hideAttribution: true }}
       >

@@ -1,9 +1,10 @@
-import { Node, Edge } from "reactflow";
+import type { Node, Edge } from "@xyflow/react";
 
 // Node types
 export type NodeType = "text" | "image" | "video" | "llm" | "crop" | "frame";
 
-export interface NodeData {
+// React Flow v12 requires node data to be a Record, so this is a type alias
+export type NodeData = {
   label: string;
   type: NodeType;
   // Text node
@@ -23,12 +24,15 @@ export interface NodeData {
   heightPercent?: number;
   // Frame extraction
   timestamp?: string;
+  // Manually entered source URLs for crop/frame nodes
+  image_url?: string;
+  video_url?: string;
   // Execution state
   status?: "idle" | "running" | "success" | "error";
   error?: string;
   // Connected inputs (disable manual input when connected)
   connectedInputs?: string[];
-}
+};
 
 export type WorkflowNode = Node<NodeData>;
 export type WorkflowEdge = Edge;
